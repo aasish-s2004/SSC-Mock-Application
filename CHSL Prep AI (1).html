@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CHSL Prep AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#eceeff;--card:rgba(255,255,255,.72);--ink:#14163a;--mut:#5d6290;--line:rgba(110,100,220,.22);--pri:#5b45f0;--on:#fff;--tint:rgba(124,92,255,.14);--ok:#0f9d6a;--bad:#e0405a;--mk:#8b4df0;--warn:#b7791f;--g:linear-gradient(120deg,#6d4bff,#1fb6e8 50%,#ff5ca8);--sh:0 10px 30px rgba(80,60,200,.16);--fd:Unbounded,"Trebuchet MS",system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0b1e;--card:rgba(24,26,64,.66);--ink:#eceeff;--mut:#9ea3d6;--line:rgba(150,140,255,.24);--pri:#8f7bff;--tint:rgba(143,123,255,.18);--ok:#3fe0a5;--bad:#ff6b85;--mk:#c19bff;--warn:#ffc15a;--sh:0 10px 40px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--bg:#0a0b1e;--card:rgba(24,26,64,.66);--ink:#eceeff;--mut:#9ea3d6;--line:rgba(150,140,255,.24);--pri:#8f7bff;--tint:rgba(143,123,255,.18);--ok:#3fe0a5;--bad:#ff6b85;--mk:#c19bff;--warn:#ffc15a;--sh:0 10px 40px rgba(0,0,0,.5)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+body.lt{font-size:19px}
+#bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+#bg i{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;animation:drift 16s ease-in-out infinite alternate}
+#bg i:nth-child(1){width:46vmax;height:46vmax;left:-12vmax;top:-14vmax;background:#7c5cff}
+#bg i:nth-child(2){width:38vmax;height:38vmax;right:-10vmax;top:18vh;background:#1fb6e8;animation-delay:-6s}
+#bg i:nth-child(3){width:34vmax;height:34vmax;left:25vw;bottom:-16vmax;background:#ff5ca8;animation-delay:-11s}
+#bg:after{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%);mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%)}
+#pb{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--g);transform:scaleX(0);transform-origin:left;z-index:40;opacity:0}
+#pb.go{animation:bar .8s ease-out}
+h1,h2,h3{font-family:var(--fd);margin:0 0 .5em;line-height:1.2;letter-spacing:-.02em}
+h1{font-size:clamp(1.4rem,4.4vw,2.2rem);font-weight:800;background:var(--g);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+h2{font-size:1.3rem;font-weight:700}h3{font-size:1.02rem;font-weight:700}
+small,.mut{color:var(--mut)}
+.app{display:flex;min-height:100vh}
+.side{width:236px;flex:none;padding:18px 12px;border-right:1px solid var(--line);background:var(--card);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);position:sticky;top:0;align-self:flex-start;height:100vh;overflow:auto}
+.logo{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;font:800 1rem/1 var(--fd)}
+.logo .t{background:var(--g);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
+.logo b{font-size:.62rem;padding:4px 7px;border-radius:99px;background:var(--g);color:#fff;margin-left:6px;vertical-align:middle;animation:glow 2.6s infinite}
+.mk{width:38px;height:38px;border-radius:12px;background:var(--g);display:grid;place-items:center;flex:none;box-shadow:0 6px 20px rgba(109,75,255,.45);animation:float 4s ease-in-out infinite}
+.ml{display:none}
+.nv{position:relative;display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;color:var(--ink);font:inherit;font-weight:600;padding:10px 12px;border-radius:12px;cursor:pointer;text-align:left;min-height:44px;overflow:hidden;transition:transform .2s,background .2s}
+.nv:hover{transform:translateX(5px);background:var(--tint)}
+.nv.on{background:var(--tint);color:var(--pri);font-weight:800;box-shadow:inset 3px 0 0 var(--pri)}
+.nv.on span{animation:hop .6s}
+main{flex:1;min-width:0;padding:24px;max-width:1040px}
+.card{position:relative;overflow:hidden;background:var(--card);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:var(--sh);transition:transform .3s,box-shadow .3s,border-color .3s}
+.card:before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(280px circle at var(--mx,50%) var(--my,0%),rgba(124,92,255,.2),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover:before{opacity:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:16px}
+.grid .card{margin:0}.grid .card:hover{transform:translateY(-5px);border-color:var(--pri)}
+.k{font:800 1.7rem var(--fd)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{position:relative;overflow:hidden;font:inherit;font-weight:700;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:.5em 1.1em;min-height:44px;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+.btn:hover{transform:translateY(-2px);border-color:var(--pri);box-shadow:0 6px 18px rgba(109,75,255,.25)}
+.btn:active{transform:scale(.94)}
+.btn.p{background:var(--g);background-size:200% 100%;color:#fff;border:0;box-shadow:0 8px 22px rgba(109,75,255,.4)}
+.btn.p:hover{background-position:100% 0}
+.btn.p:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:sweep 3.6s ease-in-out infinite}
+.btn.lg{font-size:1.1rem;padding:.75em 1.8em;animation:glow 2.4s infinite}
+.btn:focus-visible,.opt:focus-visible,.pc:focus-visible,.nv:focus-visible,input:focus-visible,select:focus-visible,.chip:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.rpl{position:absolute;border-radius:50%;background:currentColor;opacity:.3;transform:scale(0);animation:rp .6s ease-out forwards;pointer-events:none}
+.hero{background:var(--g);background-size:250% 250%;color:#fff;border:0;animation:flow 9s ease infinite alternate}
+.hero:before{inset:-60%;background:conic-gradient(transparent,rgba(255,255,255,.3),transparent 28%);opacity:1;animation:spin 9s linear infinite}
+.hero>*{position:relative;z-index:1}
+.hero h2{font-size:1.5rem}.hero small{color:inherit;opacity:.85}
+.hero .btn.p{background:#fff;color:#4a35d6;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.big{font:800 2.8rem var(--fd)}
+.rg{flex:none;transform:rotate(-90deg)}.rg circle{fill:none;stroke:rgba(255,255,255,.28);stroke-width:10}
+.rg .fg{stroke:#fff;stroke-linecap:round;stroke-dasharray:327;animation:ring 1.6s .3s cubic-bezier(.2,.8,.2,1) backwards;stroke-dashoffset:var(--off)}
+.chip{position:relative;overflow:hidden;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:.3em 1em;font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;min-height:36px;transition:transform .18s,border-color .18s,background .18s}
+.chip:hover{transform:translateY(-2px) scale(1.04);border-color:var(--pri)}
+.chip:active{transform:scale(.93)}
+.tag{font-size:.8rem;color:var(--mut);margin-bottom:8px}
+.qt{font-size:1.18rem;font-weight:600;margin:.2em 0 1.1em}
+.opt{position:relative;overflow:hidden;display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;font-weight:600;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:10px;cursor:pointer;min-height:54px;transition:transform .2s,border-color .2s,box-shadow .2s,background .2s}
+.opt:hover:not(:disabled){transform:translateX(6px);border-color:var(--pri)}
+.opt:active:not(:disabled){transform:scale(.98)}
+.opt i{position:relative;width:32px;height:32px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;font-style:normal;font-weight:800;flex:none;transition:background .2s}
+.opt.s{border-color:var(--pri);background:var(--tint);box-shadow:0 0 0 4px var(--tint)}
+.opt.s i{background:var(--pri);color:#fff;border-color:var(--pri);animation:pop .45s}
+.opt.s i:after,.opt.ok i:after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--pri);animation:burst .6s ease-out forwards}
+.opt.ok{border-color:var(--ok);animation:okp .7s}.opt.ok i{background:var(--ok);color:#fff;border-color:var(--ok);animation:pop .45s}
+.opt.no{border-color:var(--bad);animation:shake .45s}.opt.no i{background:var(--bad);color:#fff;border-color:var(--bad)}
+.eh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 18px;background:var(--card);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.tp{height:4px;background:var(--line);position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);z-index:5}
+.tp i{display:block;height:100%;background:var(--g);transition:width 1s linear;box-shadow:0 0 12px var(--pri)}
+.tm{font:700 1.45rem ui-monospace,Menlo,monospace;background:var(--tint);padding:4px 14px;border-radius:12px}
+.tm.lo{color:var(--bad);animation:blink 1s infinite;text-shadow:0 0 14px var(--bad)}
+.ex{display:grid;grid-template-columns:1fr 280px;gap:16px;padding:16px;max-width:1120px;margin:0 auto}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pg{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pc{position:relative;overflow:hidden;aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;transition:transform .15s}
+.pc:hover{transform:scale(1.14);z-index:1}.pc:active{transform:scale(.9)}
+.pc.an{background:var(--ok);color:#fff;border-color:var(--ok)}.pc.na{background:var(--bad);color:#fff;border-color:var(--bad)}
+.pc.mk{background:var(--mk);color:#fff;border-radius:50%}.pc.am{background:var(--mk);color:#fff;border-radius:50%;box-shadow:inset 0 -7px 0 var(--ok)}
+.pc.cur{outline:3px solid var(--pri);outline-offset:1px;animation:pulse 1.6s infinite}
+.lg2{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.8rem;color:var(--mut);margin:10px 0}
+.br{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin:9px 0;font-size:.95rem}
+.tr{height:12px;background:var(--tint);border-radius:9px;overflow:hidden}
+.tr div{height:100%;background:var(--g);border-radius:9px;transform-origin:left;animation:grow 1.2s .25s cubic-bezier(.2,.8,.2,1) backwards}
+.mp{display:none}
+.md{position:fixed;inset:0;background:rgba(5,6,25,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:20;padding:16px;animation:fade .25s}
+.md .card{max-width:430px;width:100%;margin:0;animation:pop .45s cubic-bezier(.2,1.2,.3,1)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--g);color:#fff;font-weight:700;padding:12px 20px;border-radius:14px;box-shadow:var(--sh);z-index:30;display:none;max-width:90%;animation:toast .4s cubic-bezier(.2,1.2,.3,1)}
+.bd{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:99px;background:var(--tint);color:var(--pri)}
+input,select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:42px}
+.bn{display:none}
+.fl{display:inline-block;animation:flame 1.2s ease-in-out infinite;transform-origin:50% 90%}
+.wc{animation:pop .8s cubic-bezier(.2,1.2,.3,1) backwards}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:60}
+#cel{position:fixed;inset:0;z-index:55;display:grid;place-items:center;text-align:center;background:rgba(10,11,40,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;animation:fade .3s,fadeout .5s 1.4s forwards}
+#cel svg{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 16px #7c5cff)}
+#cel circle{stroke-dasharray:151;animation:draw .7s .1s backwards}
+#cel path{stroke-dasharray:40;animation:draw .5s .7s backwards}
+#cel h2{margin-top:12px;font-size:1.7rem;animation:pop .6s .5s backwards}
+main.anim>*:not(.grid):not(.ex):not(.eh),main.anim .grid>*,main.anim .ex>*{animation:rise .6s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0)*70ms)}
+main.anim .ex>section{animation-name:slidein}
+body.exam .side,body.exam .bn{display:none}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.98);filter:blur(6px)}}
+@keyframes slidein{from{opacity:0;transform:translateX(44px)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+@keyframes burst{to{transform:scale(2);opacity:0}}
+@keyframes shine{to{background-position:220% 0}}
+@keyframes flow{to{background-position:100% 100%}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drift{to{transform:translate(8vw,6vh) scale(1.15)}}
+@keyframes float{50%{transform:translateY(-4px) rotate(-4deg)}}
+@keyframes sweep{0%{left:-60%}45%,100%{left:130%}}
+@keyframes glow{0%,100%{box-shadow:0 8px 22px rgba(109,75,255,.4)}50%{box-shadow:0 8px 34px rgba(31,182,232,.7),0 0 0 6px rgba(124,92,255,.18)}}
+@keyframes rp{to{transform:scale(4);opacity:0}}
+@keyframes bar{0%{opacity:1;transform:scaleX(0)}100%{opacity:0;transform:scaleX(1)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes ring{from{stroke-dashoffset:327}}
+@keyframes hop{40%{transform:translateY(-6px) scale(1.25)}}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes okp{50%{transform:scale(1.03);box-shadow:0 0 0 8px rgba(63,224,165,.25)}}
+@keyframes pulse{50%{box-shadow:0 0 0 5px var(--tint)}}
+@keyframes blink{50%{opacity:.55}}
+@keyframes flame{50%{transform:scale(1.25) rotate(-8deg)}}
+@keyframes fade{from{opacity:0}}
+@keyframes fadeout{to{opacity:0;visibility:hidden}}
+@keyframes toast{from{opacity:0;transform:translate(-50%,20px) scale(.9)}}
+@keyframes draw{from{stroke-dashoffset:151}}
+@media(max-width:800px){
+ .side{display:none}.ml{display:block}.bn{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--card);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--line);overflow-x:auto;padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+ .bn .nv{flex-direction:column;gap:0;min-width:78px;font-size:.72rem;justify-content:center;padding:6px;text-align:center;box-shadow:none!important}.bn .nv:hover{transform:none}
+ main{padding:14px 14px 96px}.ex{grid-template-columns:1fr;padding:10px}.pal{display:none}.pal.open{display:block}.mp{display:inline-block}
+ .br{grid-template-columns:100px 1fr 56px}body.exam .bn{display:none}.tp{top:calc(env(safe-area-inset-top,0px) + 98px)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style></head><body>
+<div id="bg"><i></i><i></i><i></i></div><div id="pb"></div>
+<div class="app" id="app"><nav class="side" id="side" aria-label="Main"></nav><main id="main"></main></div>
+<nav class="bn" id="bn" aria-label="Main"></nav><div id="toast" role="status"></div><div id="mdl"></div>
+<script>
+const $=s=>document.querySelector(s);
+const L=(k,d)=>{try{const v=localStorage.getItem('chsl_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+const S=(k,v)=>{try{localStorage.setItem('chsl_'+k,JSON.stringify(v))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hs=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0};
+const rng=a=>()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const ri=(r,a,b)=>a+Math.floor(r()*(b-a+1)),pk=(r,a)=>a[Math.floor(r()*a.length)];
+const sh=(r,a)=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const near=a=>{const s=Math.max(2,Math.round(a/8));return[a+s,a-s,a+2*s,a-2*s,a+3*s].filter(x=>x>0)};
+const fmtT=s=>{s=Math.max(0,Math.round(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const ds=d=>d.toLocaleDateString('en-CA');
+
+/* ---- Exam pattern: configuration, not hard-coded (editable in Settings) ---- */
+const SUBJ=['Reasoning','Quantitative Aptitude','English','General Awareness'];
+const DEF={q:{Reasoning:25,'Quantitative Aptitude':25,English:25,'General Awareness':25},mins:60,plus:2,minus:.5};
+let PAT=L('pat',DEF);
+const score=(c,w,p=PAT)=>c*p.plus-w*p.minus;
+const total=p=>Object.values(p.q).reduce((a,b)=>a+b,0);
+
+/* ---- Question bank: programmatic generators (answers computed, so verified by construction) ---- */
+const P=(items,tpl,e)=>r=>{const[q,a]=pk(r,items);return[tpl(q),a,sh(r,items.map(x=>x[1])),e(q,a),1]};
+const enc=(w,k)=>[...w].map(c=>String.fromCharCode((c.charCodeAt(0)-65+k+26)%26+65)).join('');
+const BANK={
+Reasoning:{
+ 'Number Series':r=>{const s=ri(r,2,30),d=ri(r,2,9),k=r()<.5?0:ri(r,1,4),t=[s];let f=d;for(let i=0;i<5;i++){t.push(t[i]+f);f+=k}return[`Find the next number: ${t.slice(0,5).join(', ')}, ?`,t[5],near(t[5]),k?`Differences grow by ${k} each step, so the next term is ${t[5]}.`:`Common difference is ${d}, so the next term is ${t[5]}.`,k?2:1]},
+ 'Coding-Decoding':r=>{const w=['PLANT','TRAIN','MOUSE','CLOCK','RIVER','STONE','HOUSE','BRAVE'],a=sh(r,w),k=ri(r,1,4);return[`If ${a[0]} is coded as ${enc(a[0],k)}, how is ${a[1]} coded?`,enc(a[1],k),[1,2,-1,-2,5].map(x=>enc(a[1],k+x)),`Every letter moves ${k} place${k>1?'s':''} forward in the alphabet.`,2]},
+ 'Direction Sense':r=>{const[a,b,c]=pk(r,[[3,4,5],[6,8,10],[5,12,13],[9,12,15],[8,15,17]]);return[`Ravi walks ${a} km north, then ${b} km east. How far is he from the starting point (in km)?`,c,near(c),`Right triangle: √(${a}² + ${b}²) = ${c}.`,2]}},
+'Quantitative Aptitude':{
+ 'Percentage':r=>{const p=pk(r,[5,10,15,20,25,30,35,40,45,60,75]),n=ri(r,3,50)*20,a=p*n/100;return[`What is ${p}% of ${n}?`,a,near(a),`${p}/100 × ${n} = ${a}.`,1]},
+ 'Profit & Loss':r=>{if(r()<.5){const c=ri(r,5,60)*20,x=pk(r,[5,10,15,20,25]),a=c+c*x/100;return[`An article bought for ₹${c} is sold at a ${x}% profit. Find the selling price (₹).`,a,near(a),`SP = ${c} × ${100+x}/100 = ${a}.`,1]}const m=ri(r,5,60)*20,d=pk(r,[5,10,15,20,25]),a=m-m*d/100;return[`The marked price is ₹${m}. After a ${d}% discount, what is the selling price (₹)?`,a,near(a),`SP = ${m} × ${100-d}/100 = ${a}.`,2]},
+ 'Simple Interest':r=>{const p=ri(r,5,60)*100,q=ri(r,3,12),t=ri(r,2,5),a=p*q*t/100;return[`Find the simple interest (₹) on ₹${p} at ${q}% per annum for ${t} years.`,a,near(a),`SI = P×R×T/100 = ${p}×${q}×${t}/100 = ${a}.`,1]},
+ 'Average':r=>{const n=[0,1,2,3].map(()=>ri(r,10,60)),s=n.reduce((a,b)=>a+b);let e=ri(r,10,60);e+=(5-(s+e)%5)%5;n.push(e);const a=(s+e)/5;return[`Find the average of ${n.join(', ')}.`,a,near(a),`Sum = ${s+e}; ${s+e} ÷ 5 = ${a}.`,1]},
+ 'Ratio & Proportion':r=>{const a=ri(r,1,5),b=a+ri(r,1,4),k=ri(r,5,40),t=k*(a+b);return[`₹${t} is divided in the ratio ${a}:${b}. What is the larger share (₹)?`,k*b,near(k*b),`One part = ${t}/${a+b} = ${k}; larger share = ${b} × ${k} = ${k*b}.`,2]},
+ 'Time & Work':r=>{const[x,y,a]=pk(r,[[10,15,6],[12,24,8],[20,30,12],[18,9,6],[30,45,18]]);return[`A can finish a job in ${x} days and B in ${y} days. Working together, in how many days will they finish it?`,a,near(a),`Combined rate = 1/${x} + 1/${y} = 1/${a}.`,3]}},
+English:{
+ 'Synonyms':P([['abundant','plentiful'],['brief','short'],['ancient','old'],['rapid','swift'],['conceal','hide'],['diligent','hardworking'],['enormous','huge'],['fragile','delicate'],['genuine','authentic'],['hostile','unfriendly'],['tranquil','calm'],['vital','essential'],['reluctant','unwilling']],q=>`Choose the word closest in meaning to “${q}”.`,(q,a)=>`“${q}” is closest in meaning to “${a}”.`),
+ 'Antonyms':P([['expand','contract'],['victory','defeat'],['ancient','modern'],['generous','stingy'],['rigid','flexible'],['optimistic','pessimistic'],['scarce','abundant'],['humble','arrogant'],['transparent','opaque'],['permanent','temporary'],['accept','reject'],['brave','cowardly'],['increase','decrease']],q=>`Choose the word opposite in meaning to “${q}”.`,(q,a)=>`The opposite of “${q}” is “${a}”.`)},
+'General Awareness':{
+ 'Geography':P([['Kerala','Thiruvananthapuram'],['Maharashtra','Mumbai'],['Karnataka','Bengaluru'],['Rajasthan','Jaipur'],['Odisha','Bhubaneswar'],['Assam','Dispur'],['Goa','Panaji']],q=>`What is the capital of ${q}?`,(q,a)=>`${a} is the capital of ${q}.`),
+ 'Chemistry':P([['gold','Au'],['sodium','Na'],['iron','Fe'],['potassium','K'],['silver','Ag'],['lead','Pb']],q=>`What is the chemical symbol of ${q}?`,(q,a)=>`The symbol of ${q} is ${a}.`),
+ 'Physics':P([['force','Newton'],['power','Watt'],['frequency','Hertz'],['pressure','Pascal'],['energy','Joule'],['electrical resistance','Ohm']],q=>`What is the SI unit of ${q}?`,(q,a)=>`The SI unit of ${q} is the ${a}.`),
+ 'History':P([['Battle of Plassey',1757],['First War of Independence',1857],['Jallianwala Bagh massacre',1919],['Quit India Movement',1942],['Independence of India',1947],['First Battle of Panipat',1526]],q=>`Which year is associated with the ${q}?`,(q,a)=>`${q}: ${a}.`)}};
+const subjOf=t=>SUBJ.find(s=>BANK[s][t]);
+function build(subj,topic,r){const[text,ans,c,exp,df]=BANK[subj][topic](r),a=String(ans),d=[...new Set(c.map(String))].filter(x=>x!==a).slice(0,3),o=sh(r,[a,...d]);return{id:hs(text+topic).toString(36),subj,topic,text,o,k:o.indexOf(a),exp,diff:['Easy','Medium','Hard'][df-1]}}
+function wpick(r,s,ts){const t=Object.keys(BANK[s]),w=t.map(k=>{const x=ts[k];return x&&x[0]>=3?1+2*(1-x[1]/x[0]):1.3});let x=r()*w.reduce((a,b)=>a+b);for(let i=0;i<t.length;i++){x-=w[i];if(x<=0)return t[i]}return t[0]}
+/* Daily-mock selection: topic weight rises as accuracy falls, subject counts stay fixed, no duplicates, avoids recently seen ids */
+function make(q,seed,adapt){const r=rng(seed),ts=adapt?L('ts',{}):{},rec=new Set(L('recent',[])),out=[],seen=new Set();for(const[s,n]of Object.entries(q)){let c=0,t=0;while(c<n&&t++<n*60){const x=build(s,wpick(r,s,ts),r);if(seen.has(x.text)||(t<n*30&&rec.has(x.id)))continue;seen.add(x.text);out.push(x);c++}}return out}
+function daily(){let d=L('daily',null);const t=ds(new Date()),sig=JSON.stringify(PAT);if(!d||d.d!==t||d.sig!==sig){d={d:t,sig,qs:make(PAT.q,hs('daily'+t+L('name','')),true)};S('daily',d)}return d}
+
+/* ---- State ---- */
+let V='dash',T=L('active',null),Pr=null,NB='mist',RID=null,RF='all',tmo;
+const toast=m=>{const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(tmo);tmo=setTimeout(()=>e.style.display='none',3500)};
+function agg(){const h=L('hist',[]),sj={};let c=0,w=0,u=0,sc=0,t=0,n=0,best=null;h.forEach(x=>{c+=x.c;w+=x.w;u+=x.u;sc+=x.score;t+=x.used;n+=x.c+x.w+x.u;best=best==null?x.score:Math.max(best,x.score);for(const[k,v]of Object.entries(x.sj)){const o=sj[k]||(sj[k]={c:0,w:0,u:0});o.c+=v.c;o.w+=v.w;o.u+=v.u}});return{h,sj,c,w,u,tests:h.length,acc:c+w?Math.round(100*c/(c+w)):0,avg:h.length?Math.round(sc/h.length*10)/10:0,best,tpq:n?Math.round(t/n):0}}
+function streak(){const d=new Set([...L('hist',[]).map(x=>x.date),...L('days',[])]);let n=0,t=new Date();if(!d.has(ds(t)))t.setDate(t.getDate()-1);while(d.has(ds(t))){n++;t.setDate(t.getDate()-1)}return n}
+const weak=()=>Object.entries(L('ts',{})).filter(([,v])=>v[0]>=3).map(([k,v])=>[k,Math.round(100*v[1]/v[0])]).sort((a,b)=>a[1]-b[1]);
+function rec(q,ok){const ts=L('ts',{}),x=ts[q.topic]||(ts[q.topic]=[0,0]);x[0]++;if(ok)x[1]++;S('ts',ts);const m=L('mist',{});if(!ok){const e=m[q.id]||(m[q.id]={q,n:0});e.n++;S('mist',m)}}
+const bar=(l,v,m,t)=>`<div class="br"><span>${l}</span><div class="tr"><div style="width:${Math.max(0,Math.min(100,100*v/m))}%"></div></div><b>${t}</b></div>`;
+const stat=(l,v)=>{const n=parseFloat(v),a=isNaN(n)?'':` data-cnt="${n}" data-dec="${n%1?1:0}" data-suf="${String(v).replace(/[-\d.]/g,'')}"`;return`<div class="card"><div class="k"${a}>${v}</div><small>${l}</small></div>`};
+
+/* ---- Exam engine ---- */
+function startExam(name,qs,daily){T={id:Date.now(),name,qs,a:{},v:{0:1},m:{},t:{},cur:0,start:Date.now(),end:Date.now()+PAT.mins*60000,last:Date.now(),w:{},pat:PAT,daily:daily||null};S('active',T);V='exam';draw()}
+function go(i){const n=Date.now();T.t[T.cur]=(T.t[T.cur]||0)+(n-T.last)/1000;T.last=n;T.cur=Math.max(0,Math.min(T.qs.length-1,i));T.v[T.cur]=1;S('active',T);draw()}
+function finish(auto){if(!T)return;const n=Date.now();T.t[T.cur]=(T.t[T.cur]||0)+(n-T.last)/1000;const p=T.pat,sj={};let c=0,w=0,u=0;T.qs.forEach((q,i)=>{const o=sj[q.subj]||(sj[q.subj]={c:0,w:0,u:0,score:0,max:0});o.max+=p.plus;if(T.a[i]==null){u++;o.u++}else if(T.a[i]===q.k){c++;o.c++;o.score+=p.plus}else{w++;o.w++;o.score-=p.minus}if(T.a[i]!=null)rec(q,T.a[i]===q.k)});
+ const h=L('hist',[]);h.push({id:T.id,name:T.name,date:ds(new Date()),score:score(c,w,p),max:T.qs.length*p.plus,c,w,u,used:Math.min(p.mins*60,(n-T.start)/1000),sj,daily:T.daily});S('hist',h);
+ const rv=L('rev',{});rv[T.id]={qs:T.qs,a:T.a,t:T.t,m:T.m};Object.keys(rv).sort().slice(0,-8).forEach(k=>delete rv[k]);S('rev',rv);
+ S('recent',[...L('recent',[]),...T.qs.map(q=>q.id)].slice(-400));RID=T.id;T=null;S('active',null);V='result';$('#mdl').innerHTML='';if(auto)toast("Time is up. Your test was submitted automatically.");draw();const z=h[h.length-1];celebrate(Math.max(0,100*z.score/z.max))}
+function tick(){if(!T||V!=='exam')return;const rem=Math.round((T.end-Date.now())/1000),e=$('#tm');if(e){e.textContent=fmtT(rem);e.className='tm'+(rem<=300?' lo':'')}const pb=$('#tpb');if(pb)pb.style.width=Math.max(0,100*rem/(T.pat.mins*60))+'%';[600,300,60].forEach(m=>{if(rem<=m&&rem>0&&!T.w[m]){T.w[m]=1;S('active',T);toast(`${m/60} minute${m>60?'s':''} remaining`)}});if(rem<=0)finish(true)}
+setInterval(tick,1000);
+function pstate(i){const a=T.a[i]!=null,m=T.m[i];return a&&m?'am':m?'mk':a?'an':T.v[i]?'na':''}
+function palette(){return`<div class="pg">${T.qs.map((_,i)=>`<button class="pc ${pstate(i)} ${i===T.cur?'cur':''}" data-a="go" data-i="${i}" aria-label="Question ${i+1}">${i+1}</button>`).join('')}</div><div class="lg2"><span>⬜ Not visited</span><span>🟩 Answered</span><span>🟥 Not answered</span><span>🟣 Marked</span><span>🟣 Answered + marked</span></div><button class="btn p" style="width:100%" data-a="sub">Submit test</button>`}
+function exam(){const i=T.cur,q=T.qs[i];return`<header class="eh"><div><b>${esc(T.name)}</b><br><small>SSC CHSL Tier-I · ${q.subj}</small></div><div class="tm" id="tm">${fmtT((T.end-Date.now())/1000)}</div><div class="row"><b>${i+1} / ${T.qs.length}</b><button class="btn mp" data-a="tpal">Palette</button></div></header><div class="tp"><i id="tpb" style="width:${Math.max(0,100*(T.end-Date.now())/(T.pat.mins*60000))}%"></i></div>
+<div class="ex"><section class="card"><div class="tag"><span class="bd">AI Generated Practice Question</span> ${q.topic} · ${q.diff}</div><p class="qt">${esc(q.text)}</p><div role="radiogroup" aria-label="Options">${q.o.map((o,k)=>`<button class="opt ${T.a[i]===k?'s':''}" role="radio" aria-checked="${T.a[i]===k}" data-a="sel" data-k="${k}"><i>${'ABCD'[k]}</i>${esc(o)}</button>`).join('')}</div>
+<div class="bar"><button class="btn" data-a="prev">Previous</button><button class="btn" data-a="mark">${T.m[i]?'Unmark review':'Mark for review'}</button><button class="btn" data-a="clr">Clear response</button><button class="btn p" data-a="next">Save &amp; next</button></div><small class="mut">Keys: 1–4 select · N next · P previous · M mark</small></section>
+<aside class="pal card" id="pal">${palette()}</aside></div>`}
+function subModal(){const n=T.qs.length,a=Object.keys(T.a).length,m=Object.keys(T.m).length;$('#mdl').innerHTML=`<div class="md"><div class="card" role="dialog" aria-modal="true"><h3>Submit test?</h3><p>You have answered ${a} out of ${n} questions.</p><p>Answered: <b>${a}</b><br>Unanswered: <b>${n-a}</b><br>Marked for review: <b>${m}</b></p><p>Are you sure you want to submit?</p><div class="row"><button class="btn" data-a="cancel">Cancel</button><button class="btn p" data-a="fin">Submit test</button></div></div></div>`}
+
+/* ---- Practice mode (instant feedback) ---- */
+function mk(subj,topic,n=10){const r=rng(Date.now()),out=[],seen=new Set();for(let t=0;out.length<n&&t<300;t++){const x=build(subj,topic||wpick(r,subj,L('ts',{})),r);if(!seen.has(x.text)){seen.add(x.text);out.push(x)}}return out}
+function startPractice(qs,title){if(!qs.length){toast('No questions are available for this topic yet.');return}Pr={qs,i:0,sel:null,c:0,title};V='prac';draw()}
+function practice(){if(Pr.i>=Pr.qs.length)return`<div class="card"><h2>Practice complete</h2><p class="big">${Pr.c} / ${Pr.qs.length}</p><div class="row"><button class="btn p" data-a="nav" data-v="prac">More practice</button><button class="btn" data-a="nav" data-v="nb">Open notebook</button></div></div>`;const q=Pr.qs[Pr.i],s=Pr.sel;return`<h2>${esc(Pr.title)} · ${Pr.i+1}/${Pr.qs.length}</h2><section class="card"><div class="tag"><span class="bd">AI Generated Practice Question</span> ${q.topic} · ${q.diff}</div><p class="qt">${esc(q.text)}</p>${q.o.map((o,k)=>`<button class="opt ${s!=null?(k===q.k?'ok':k===s?'no':''):''}" data-a="psel" data-k="${k}" ${s!=null?'disabled':''}><i>${'ABCD'[k]}</i>${esc(o)}</button>`).join('')}${s!=null?`<p><b>${s===q.k?'✔ Correct':'✘ Incorrect'}.</b> ${esc(q.exp)}</p><button class="btn p" data-a="pnext">${Pr.i+1<Pr.qs.length?'Next question':'Finish'}</button>`:''}</section>`}
+
+/* ---- Views ---- */
+const NAV=[['dash','🏠','Dashboard'],['daily','⏱','Daily Mock'],['prac','✏️','Practice'],['pyq','📄','Previous Year'],['perf','📊','Performance'],['nb','📒','Notebook'],['road','🧭','Roadmap'],['set','⚙️','Settings']];
+function dash(){const a=agg(),w=weak(),d=daily(),done=a.h.some(x=>x.daily===d.d),hr=new Date().getHours(),g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',solved=Object.values(L('ts',{})).reduce((s,v)=>s+v[0],0);
+return`<div class="ml">${LOGO}</div><h1>${g}, ${esc(L('name',''))}</h1><p class="mut">SSC CHSL Tier-I preparation · <span class="fl">🔥</span> ${streak()} day streak</p>
+<div class="card hero"><h2>${done?'Daily mock completed ✔':'Your daily mock is ready'}</h2><p>${d.qs.length} questions · ${PAT.mins} minutes · ${d.qs.length*PAT.plus} marks</p><button class="btn p lg" data-a="daily">${done?'Retake daily mock':'Start daily mock'}</button></div>
+<div class="grid">${stat('Accuracy',a.acc+'%')}${stat('Average score',a.avg)}${stat('Tests taken',a.tests)}${stat('Questions solved',solved)}</div>
+<div class="card"><h3>Recommended practice</h3>${w.length?`<p>⚠ Weak topic: <b>${w[0][0]}</b> (${w[0][1]}% accuracy)</p><button class="btn p" data-a="pt" data-t="${w[0][0]}">Practice now</button>`:'<p class="mut">Complete a mock or a practice set to unlock personalised recommendations.</p>'}</div>
+<div class="card"><h3>Quick practice</h3><div class="row">${SUBJ.map(s=>`<button class="btn" data-a="ps" data-s="${s}">${s}</button>`).join('')}</div></div>
+<div class="card"><h3>Recent tests</h3>${a.h.slice(-4).reverse().map(x=>`<div class="row" style="justify-content:space-between"><span>${esc(x.name)}</span><b>${x.score} / ${x.max}</b><button class="btn" data-a="res" data-id="${x.id}">View</button></div>`).join('')||'<p class="mut">No tests yet.</p>'}</div>`}
+function dailyV(){const d=daily(),by={};d.qs.forEach(q=>by[q.subj]=(by[q.subj]||0)+1);const tp={};d.qs.forEach(q=>tp[q.topic]=(tp[q.topic]||0)+1);
+return`<h1>Daily Mock</h1><div class="card"><p>${d.d} · ${d.qs.length} questions · ${PAT.mins} min · +${PAT.plus} / −${PAT.minus} marking</p>${SUBJ.map(s=>bar(s,by[s]||0,d.qs.length,by[s]||0)).join('')}<p class="mut">Topics with lower accuracy get a higher selection weight; subject counts stay fixed to the exam pattern. Pre-generated once per day and kept for the day.</p><div class="row">${Object.entries(tp).map(([k,v])=>`<span class="chip">${k} · ${v}</span>`).join('')}</div><p><button class="btn p lg" data-a="daily">Start daily mock</button></p></div>`}
+function pracV(){const ts=L('ts',{});return`<h1>Practice</h1><div class="row" style="margin-bottom:14px"><button class="btn p" data-a="pw">Practice weak areas</button><button class="btn" data-a="pm">Random mixed set</button></div>${SUBJ.map(s=>`<div class="card"><h3>${s}</h3><div class="row"><button class="chip" data-a="ps" data-s="${s}">All topics</button>${Object.keys(BANK[s]).map(t=>{const x=ts[t];return`<button class="chip" data-a="pt" data-t="${t}">${t}${x?` · ${Math.round(100*x[1]/x[0])}%`:''}</button>`}).join('')}</div></div>`).join('')}<p class="mut">Topic lists are configuration. The bank here is a demo set; a production bank is filled through verified imports.</p>`}
+function pyqV(){return`<h1>Previous Year Papers</h1><div class="card"><div class="row"><select aria-label="Exam"><option>SSC CHSL</option></select><select aria-label="Tier"><option>Tier-I</option></select><select aria-label="Year">${[2025,2024,2023,2022,2021,2020,2019,2018,2017,2016].map(y=>`<option>${y}</option>`).join('')}</select><select aria-label="Shift"><option>All shifts</option></select></div></div>
+<div class="card"><h3>No verified papers yet</h3><p>Previous-year questions appear only after an admin imports a legally obtained paper (official SSC material or an uploaded PDF) and verifies it. Each one carries its source, year and shift, and is labelled “SSC CHSL Previous Year Question”.</p><p class="mut">Until then, every question in this app is labelled “AI Generated Practice Question” and is never presented as an SSC question.</p></div>`}
+function perfV(){const a=agg(),ts=L('ts',{});const top=Object.entries(ts).map(([k,v])=>[k,Math.round(100*v[1]/v[0]),v[0]]).sort((x,y)=>x[1]-y[1]);const pts=a.h.slice(-12).map(x=>100*x.score/x.max);const spark=pts.length>1?`<svg viewBox="0 0 240 60" width="100%" height="70" role="img" aria-label="Score trend"><polyline fill="none" stroke="var(--pri)" stroke-width="3" points="${pts.map((v,i)=>`${i*240/(pts.length-1)},${58-Math.max(0,v)*.56}`).join(' ')}"/></svg>`:'<p class="mut">Take two tests to see a trend.</p>';
+const tip=top.length?`Your weakest topics: ${top.slice(0,3).map(t=>`${t[0]} (${t[1]}%)`).join(', ')}. Practise 20 questions in the first one today.`:'Not enough data yet.';
+return`<h1>Performance</h1><div class="grid">${stat('Tests',a.tests)}${stat('Correct',a.c)}${stat('Wrong',a.w)}${stat('Skipped',a.u)}${stat('Accuracy',a.acc+'%')}${stat('Average score',a.avg)}${stat('Best score',a.best??'–')}${stat('Sec / question',a.tpq)}</div>
+<div class="card"><h3>Score trend (%)</h3>${spark}</div><div class="card"><h3>Subjects (mock accuracy)</h3>${SUBJ.map(s=>{const o=a.sj[s];const n=o?o.c+o.w:0;return bar(s,o?o.c:0,n||1,n?Math.round(100*o.c/n)+'%':'–')}).join('')}</div>
+<div class="card"><h3>Topics</h3>${top.map(t=>bar(t[0],t[1],100,t[1]+'%')).join('')||'<p class="mut">No topic data yet.</p>'}</div><div class="card"><h3>Analyzer</h3><p>${tip}</p><small class="mut">Rule-based, so it works even when the AI service is offline.</small></div>`}
+function resV(){const h=L('hist',[]).find(x=>x.id===RID);if(!h)return'<p>No result found.</p>';return`<h1>${esc(h.name)} · result</h1><div class="card hero"><div class="row" style="gap:22px;flex-wrap:nowrap"><svg class="rg" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><circle cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52" style="--off:${327*(1-Math.max(0,Math.min(1,h.score/h.max)))}"/></svg><div class="big"><span data-cnt="${h.score}" data-dec="${h.score%1?1:0}">${h.score}</span> <small>/ ${h.max}</small></div></div><div>${Math.round(100*h.score/h.max)}% · accuracy ${h.c+h.w?Math.round(100*h.c/(h.c+h.w)):0}% · time used ${fmtT(h.used)}</div></div><div class="grid">${stat('Correct',h.c)}${stat('Wrong',h.w)}${stat('Unanswered',h.u)}</div><div class="card"><h3>Subject-wise</h3>${Object.entries(h.sj).map(([k,v])=>bar(k,v.score,v.max,v.score+'/'+v.max)).join('')}</div><div class="row"><button class="btn p" data-a="rev">Review answers</button><button class="btn" data-a="nav" data-v="dash">Dashboard</button></div>`}
+function revV(){const r=L('rev',{})[RID];if(!r)return'<p>Review data is no longer stored for this test.</p>';const bm=L('bm',{});return`<h1>Review</h1><div class="row" style="margin-bottom:12px">${['all','wrong','skipped'].map(f=>`<button class="chip" data-a="rf" data-f="${f}" ${RF===f?'style="background:var(--tint)"':''}>${f}</button>`).join('')}</div>${r.qs.map((q,i)=>{const a=r.a[i],st=a==null?'skipped':a===q.k?'correct':'wrong';if(RF!=='all'&&RF!==st)return'';return`<div class="card"><div class="tag">Q${i+1} · ${q.topic} · ${q.diff} · ${Math.round(r.t[i]||0)}s · <span class="bd">AI Generated Practice Question</span></div><p class="qt">${esc(q.text)}</p><p>Your answer: <b>${a==null?'—':'ABCD'[a]+'. '+esc(q.o[a])}</b><br>Correct answer: <b>${'ABCD'[q.k]}. ${esc(q.o[q.k])}</b> · ${st==='correct'?'✔ Correct':st==='wrong'?'✘ Incorrect':'Skipped'}</p><p>${esc(q.exp)}</p><button class="btn" data-a="bm" data-id="${q.id}" data-i="${i}">${bm[q.id]?'Bookmarked ★':'Bookmark ☆'}</button> <button class="btn" data-a="pt" data-t="${q.topic}">Practice similar</button></div>`}).join('')}`}
+function nbV(){const m=NB==='mist'?L('mist',{}):L('bm',{}),l=Object.values(m);return`<h1>Notebook</h1><div class="row" style="margin-bottom:12px"><button class="chip" data-a="nb" data-n="mist" ${NB==='mist'?'style="background:var(--tint)"':''}>My mistakes</button><button class="chip" data-a="nb" data-n="bm" ${NB==='bm'?'style="background:var(--tint)"':''}>Bookmarks</button>${l.length?`<button class="btn p" data-a="nball">Retry all</button>`:''}</div>${l.map(e=>{const q=e.q||e;return`<div class="card"><div class="tag">${q.topic} · ${q.diff}${e.n?` · answered wrong ${e.n}×`:''}</div><p class="qt">${esc(q.text)}</p><p>Correct answer: <b>${'ABCD'[q.k]}. ${esc(q.o[q.k])}</b><br>${esc(q.exp)}</p><div class="row"><button class="btn" data-a="nbr" data-id="${q.id}">Retry</button><button class="btn" data-a="pt" data-t="${q.topic}">Practice similar</button><button class="btn" data-a="nbx" data-id="${q.id}">Remove</button></div></div>`}).join('')||'<div class="card"><p>Nothing here yet. Wrong answers and bookmarks collect here automatically.</p></div>'}`}
+function roadV(){const ph=[['1 · Auth, dashboard, topics, practice, test engine','Built here (profile on device)'],['2 · Exam mode, timer, palette, results, analytics','Built here'],['3 · LLM classification, explanations, generation, weak-topic AI','Next: AIService behind the API; core app works without it'],['4 · PDF import, admin review, source management','Next: nothing publishes without admin approval'],['5 · Study plans, leaderboard, XP, notifications','Planned'],['6 · Hardening, tests, deployment','Planned']];return`<h1>Roadmap</h1><div class="card"><h3>Production architecture</h3><p>Next.js + TypeScript, PostgreSQL via Prisma, JWT/session auth with roles, a separate AIService module (classify, explain, generate, analyze) and a nightly job that pre-generates each day’s mock. Every question row keeps source_name, source_url, license status and verification state. Math answers are checked by code; anything uncertain is flagged “Needs manual review”.</p></div>${ph.map(p=>`<div class="card"><b>${p[0]}</b><br><small>${p[1]}</small></div>`).join('')}`}
+function setV(){const th=L('theme','system');return`<h1>Settings</h1><div class="card"><h3>Profile and display</h3><p><label>Name <input id="nm" value="${esc(L('name',''))}"></label></p><p><label>Theme <select id="th">${['system','light','dark'].map(t=>`<option ${t===th?'selected':''}>${t}</option>`).join('')}</select></label></p><p><label><input type="checkbox" id="bg" ${L('big',0)?'checked':''}> Large text</label></p></div>
+<div class="card"><h3>Exam pattern (admin)</h3><div class="row">${SUBJ.map(s=>`<label>${s}<br><input type="number" min="0" max="60" data-c="q:${s}" value="${PAT.q[s]}"></label>`).join('')}<label>Minutes<br><input type="number" min="1" data-c="mins" value="${PAT.mins}"></label><label>Marks / correct<br><input type="number" step=".25" data-c="plus" value="${PAT.plus}"></label><label>Negative marks<br><input type="number" step=".25" data-c="minus" value="${PAT.minus}"></label></div></div>
+<div class="row"><button class="btn" data-a="selftest">Run scoring self-test</button><button class="btn" data-a="reset">Reset all data</button></div>`}
+function welcome(){return`<div class="card wc" style="max-width:440px;margin:10vh auto">${LOGO}<h1>Crack SSC CHSL, one mock at a time.</h1><p class="mut">Create your profile to start. It is stored on this device only.</p><p><input id="wn" placeholder="Your name" aria-label="Your name"></p><button class="btn p lg" data-a="join">Start preparing</button></div>`}
+
+function draw(){document.body.classList.toggle('exam',V==='exam');if(!L('name','')){$('#main').innerHTML=welcome();return}
+ const nv=NAV.map(n=>`<button class="nv ${V===n[0]?'on':''}" data-a="nav" data-v="${n[0]}"><span aria-hidden="true">${n[1]}</span>${n[2]}</button>`).join('');$('#side').innerHTML=LOGO+nv;$('#bn').innerHTML=nv;
+ const views={dash,daily:dailyV,prac:pracV,pyq:pyqV,perf:perfV,nb:nbV,road:roadV,set:setV,result:resV,review:revV,exam:()=>T?exam():dash(),prac2:practice};const m=$('#main');m.style.maxWidth=V==='exam'?'none':'';m.style.padding=V==='exam'?'0':'';
+ m.innerHTML=(views[V==='prac'&&Pr?'prac2':V]||dash)();window.scrollTo(0,0);anim()}
+
+const LOGO='<div class="logo"><span class="mk"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2.2" aria-hidden="true"><circle cx="7" cy="7" r="3.2" fill="#fff"/><circle cx="17" cy="7" r="3.2"/><circle cx="7" cy="17" r="3.2"/><circle cx="17" cy="17" r="3.2"/></svg></span><span class="t">CHSL Prep</span><b>AI</b></div>';
+let LK='';
+function anim(){const m=$('#main'),k=V+(T?T.cur:'')+(Pr?Pr.i:'');if(k===LK)return;LK=k;m.classList.remove('anim');void m.offsetWidth;m.classList.add('anim');[...m.children].forEach((c,i)=>c.style.setProperty('--i',i));m.querySelectorAll('.grid>*,.ex>*').forEach((c,i)=>c.style.setProperty('--i',i+1));const b=$('#pb');b.classList.remove('go');void b.offsetWidth;b.classList.add('go');
+ m.querySelectorAll('[data-cnt]').forEach(e=>{const t=+e.dataset.cnt,d=+e.dataset.dec||0,s=e.dataset.suf||'',t0=performance.now();(function f(n){const p=Math.min(1,(n-t0)/1100),v=t*(1-Math.pow(1-p,3));e.textContent=v.toFixed(d)+s;if(p<1)requestAnimationFrame(f)})(t0)})}
+function confetti(n){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const c=document.createElement('canvas');c.id='cf';c.width=innerWidth;c.height=innerHeight;document.body.appendChild(c);const x=c.getContext('2d'),cl=['#7c5cff','#22d3ee','#ff5ca8','#ffb020','#34d399'],p=Array.from({length:n},()=>({x:innerWidth/2+(Math.random()-.5)*240,y:innerHeight*.45,vx:(Math.random()-.5)*18,vy:-Math.random()*17-4,s:6+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cl[Math.random()*5|0]}));let f=0;(function a(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.vy+=.35;q.x+=q.vx;q.y+=q.vy;q.vx*=.99;q.r+=q.vr;x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/4,q.s,q.s/2);x.restore()});if(++f<170)requestAnimationFrame(a);else c.remove()})()}
+function celebrate(pc){const e=document.createElement('div');e.id='cel';e.innerHTML='<div><svg viewBox="0 0 52 52" width="120" height="120"><circle cx="26" cy="26" r="24"/><path d="M14 27l8 8 16-17"/></svg><h2>Test complete!</h2></div>';document.body.appendChild(e);confetti(70+Math.round(pc*1.3));setTimeout(()=>e.remove(),2000)}
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn,.opt,.pc,.nv,.chip');if(!b||b.disabled)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),x=document.createElement('span');x.className='rpl';x.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(x);setTimeout(()=>x.remove(),650)});
+document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card');if(c){const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')}});
+const A={
+ nav:d=>{V=d.v;Pr=null;draw()},join:()=>{const v=$('#wn').value.trim();if(v){S('name',v);draw()}},
+ daily:()=>startExam('Daily Mock · '+ds(new Date()),daily().qs,daily().d),
+ sel:d=>{T.a[T.cur]=+d.k;S('active',T);draw()},clr:()=>{delete T.a[T.cur];S('active',T);draw()},
+ mark:()=>{T.m[T.cur]=T.m[T.cur]?0:1;if(!T.m[T.cur])delete T.m[T.cur];go(T.cur+1)},next:()=>go(T.cur+1),prev:()=>go(T.cur-1),go:d=>go(+d.i),
+ tpal:()=>$('#pal').classList.toggle('open'),sub:subModal,cancel:()=>$('#mdl').innerHTML='',fin:()=>finish(false),
+ res:d=>{RID=+d.id;V='result';draw()},rev:()=>{V='review';draw()},rf:d=>{RF=d.f;draw()},
+ bm:d=>{const bm=L('bm',{}),r=L('rev',{})[RID];if(bm[d.id])delete bm[d.id];else bm[d.id]=r.qs[+d.i];S('bm',bm);draw()},
+ ps:d=>startPractice(mk(d.s),d.s),pt:d=>startPractice(mk(subjOf(d.t),d.t),d.t),pm:()=>startPractice(SUBJ.flatMap(s=>mk(s,null,3)),'Mixed set'),
+ pw:()=>{const w=weak().slice(0,3);if(!w.length){toast('Complete a few questions first so weak areas can be found.');return}startPractice(w.flatMap(t=>mk(subjOf(t[0]),t[0],4)),'Weak areas')},
+ psel:d=>{if(Pr.sel!=null)return;Pr.sel=+d.k;const q=Pr.qs[Pr.i],ok=Pr.sel===q.k;if(ok){Pr.c++;confetti(28)}rec(q,ok);const dy=L('days',[]);if(!dy.includes(ds(new Date()))){dy.push(ds(new Date()));S('days',dy)}draw()},
+ pnext:()=>{Pr.i++;Pr.sel=null;draw();if(Pr.i>=Pr.qs.length)confetti(100)},
+ nb:d=>{NB=d.n;draw()},nball:()=>startPractice(Object.values(NB==='mist'?L('mist',{}):L('bm',{})).map(e=>e.q||e),'Retry'),
+ nbr:d=>{const e=(NB==='mist'?L('mist',{}):L('bm',{}))[d.id];startPractice([e.q||e],'Retry')},
+ nbx:d=>{const k=NB==='mist'?'mist':'bm',m=L(k,{});delete m[d.id];S(k,m);draw()},
+ selftest:()=>{const s=score(80,10,{plus:2,minus:.5});toast(`80×2 − 10×0.5 = ${s} / 200 ${s===155?'✔ passed':'✘ failed'}`)},
+ reset:()=>{if(confirm('Delete all local data?')){Object.keys(localStorage).filter(k=>k.startsWith('chsl_')).forEach(k=>localStorage.removeItem(k));location.reload()}}};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset)});
+document.addEventListener('change',e=>{const t=e.target;if(t.id==='nm'){S('name',t.value.trim()||'Student')}else if(t.id==='th'){S('theme',t.value);applyTheme()}else if(t.id==='bg'){S('big',t.checked?1:0);applyTheme()}else if(t.dataset.c){const[k,s]=t.dataset.c.split(':'),v=parseFloat(t.value)||0;if(s)PAT.q[s]=v;else PAT[k]=v;S('pat',PAT);toast('Exam pattern saved. Today’s mock is regenerated.')}});
+document.addEventListener('keydown',e=>{if(V!=='exam'||!T||e.target.matches('input,select')||$('#mdl').innerHTML)return;const k=e.key.toLowerCase();if('1234'.includes(k)&&k)A.sel({k:+k-1});else if(k==='n')A.next();else if(k==='p')A.prev();else if(k==='m')A.mark()});
+window.addEventListener('offline',()=>toast('Connection lost. Your answers are saved locally.'));
+window.addEventListener('online',()=>toast('Connection restored.'));
+function applyTheme(){const t=L('theme','system');t==='system'?document.documentElement.removeAttribute('data-theme'):document.documentElement.setAttribute('data-theme',t);document.body.classList.toggle('lt',!!L('big',0))}
+applyTheme();
+if(T){if(T.end<=Date.now())finish(true);else{V='exam';setTimeout(()=>toast('Your test has been restored.'),300)}}
+draw();
+</script></body></html>
